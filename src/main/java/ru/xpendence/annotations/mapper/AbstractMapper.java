@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.xpendence.annotations.dto.AbstractDto;
 import ru.xpendence.annotations.entity.AbstractEntity;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,6 +30,10 @@ public abstract class AbstractMapper<E extends AbstractEntity, D extends Abstrac
     AbstractMapper(Class<E> entityClass, Class<D> dtoClass) {
         this.entityClass = entityClass;
         this.dtoClass = dtoClass;
+    }
+
+    @PostConstruct
+    public void init() {
     }
 
     @Override
