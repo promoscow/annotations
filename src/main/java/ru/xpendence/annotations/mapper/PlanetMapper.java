@@ -10,9 +10,6 @@ import ru.xpendence.annotations.entity.Planet;
  * e-mail: vyacheslav.chernyshov@stoloto.ru
  */
 @Component
+@Mapper(entity = Planet.class, dto = PlanetDto.class)
 public class PlanetMapper extends AbstractMapper<Planet, PlanetDto> {
-
-    PlanetMapper() {
-        super(Planet.class, PlanetDto.class);
-    }
 }

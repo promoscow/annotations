@@ -13,8 +13,6 @@ import ru.xpendence.annotations.attributes.TransferType;
 import ru.xpendence.annotations.entity.ApiLog;
 import ru.xpendence.annotations.service.ApiLogService;
 
-import java.time.LocalDateTime;
-
 
 /**
  * Author: Vyacheslav Chernyshov
@@ -37,7 +35,6 @@ public class ApiLogAspectProcessor {
     @Before(value = "@annotation(before) && args(param)")
     public void before(ApiLogRequest before, String param) {
         service.save(ApiLog.of(
-                LocalDateTime.now(),
                 TransferType.REQUEST.name(),
                 before.httpMethod().name(),
                 before.path(),
@@ -48,7 +45,6 @@ public class ApiLogAspectProcessor {
     @Before(value = "@annotation(before) && args(param,..)")
     public void before(ApiLogRequest before, Long param) {
         service.save(ApiLog.of(
-                LocalDateTime.now(),
                 TransferType.REQUEST.name(),
                 before.httpMethod().name(),
                 before.path(),
@@ -59,7 +55,6 @@ public class ApiLogAspectProcessor {
     @Before(value = "@annotation(before) && args(param,..)")
     public void before(ApiLogRequest before, Object param) throws JsonProcessingException {
         service.save(ApiLog.of(
-                LocalDateTime.now(),
                 TransferType.REQUEST.name(),
                 before.httpMethod().name(),
                 before.path(),
@@ -70,7 +65,6 @@ public class ApiLogAspectProcessor {
     @AfterReturning(value = "@annotation(after)", returning = "responseEntity")
     public void after(ResponseEntity responseEntity, ApiLogResponse after) throws JsonProcessingException {
         service.save(ApiLog.of(
-                LocalDateTime.now(),
                 TransferType.RESPONSE.name(),
                 after.httpMethod().name(),
                 after.path(),

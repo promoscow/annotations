@@ -8,9 +8,7 @@ import ru.xpendence.annotations.dto.AbstractDto;
 import ru.xpendence.annotations.entity.AbstractEntity;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Author: Vyacheslav Chernyshov
@@ -26,11 +24,6 @@ public abstract class AbstractMapper<E extends AbstractEntity, D extends Abstrac
 
     private Class<E> entityClass;
     private Class<D> dtoClass;
-
-    AbstractMapper(Class<E> entityClass, Class<D> dtoClass) {
-        this.entityClass = entityClass;
-        this.dtoClass = dtoClass;
-    }
 
     @PostConstruct
     public void init() {
@@ -72,13 +65,5 @@ public abstract class AbstractMapper<E extends AbstractEntity, D extends Abstrac
     }
 
     void mapSpecificFields(D source, E destination) {
-    }
-
-    List<Long> getIds(List<? extends AbstractDto> sourceList) {
-        return sourceList
-                .stream()
-                .filter(s -> Objects.nonNull(s.getId()))
-                .map(AbstractDto::getId)
-                .collect(Collectors.toList());
     }
 }

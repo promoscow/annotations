@@ -12,6 +12,5 @@ public class AnnotationsApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }
 

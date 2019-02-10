@@ -1,5 +1,6 @@
 package ru.xpendence.annotations.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,6 +13,9 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ContinentDto extends AbstractDto {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long planet;
 }

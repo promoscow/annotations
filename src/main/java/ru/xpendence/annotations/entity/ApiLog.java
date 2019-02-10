@@ -1,6 +1,5 @@
 package ru.xpendence.annotations.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,35 +19,15 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiLog {
+public class ApiLog extends AbstractEntity {
 
-    private Long id;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss.SSS")
-    private LocalDateTime created;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss.SSS")
-    private LocalDateTime updated;
-
-    private LocalDateTime eventDateTime;
     private String transferType;
     private String httpMethod;
     private String path;
     private String body;
 
-    public static ApiLog of(LocalDateTime eventDateTime, String transferType, String httpMethod, String path, String body) {
-        return new ApiLog(null, null, eventDateTime, transferType, httpMethod, path, body);
-    }
-
-    public ApiLog(Long id, LocalDateTime created, LocalDateTime eventDateTime, String transferType, String httpMethod,
-                  String path, String body) {
-        this.id = id;
-        this.created = created;
-        this.eventDateTime = eventDateTime;
-        this.transferType = transferType;
-        this.httpMethod = httpMethod;
-        this.path = path;
-        this.body = body;
+    public static ApiLog of(String transferType, String httpMethod, String path, String body) {
+        return new ApiLog(transferType, httpMethod, path, body);
     }
 
     @Id
@@ -67,14 +46,6 @@ public class ApiLog {
         if (Objects.isNull(this.getCreated())) {
             this.setCreated(LocalDateTime.now());
         }
-        if (Objects.isNull(this.getEventDateTime())) {
-            this.setEventDateTime(LocalDateTime.now());
-        }
-    }
-
-    @Column(name = "event_date_time")
-    public LocalDateTime getEventDateTime() {
-        return eventDateTime;
     }
 
     @Column(name = "updated", insertable = false)
@@ -97,12 +68,12 @@ public class ApiLog {
         return httpMethod;
     }
 
-    @Column(name = "path", columnDefinition = "mediumtext")
+    @Column(name = "path", columnDefinition = "text")
     public String getPath() {
         return path;
     }
 
-    @Column(name = "body", columnDefinition = "mediumtext")
+    @Column(name = "body", columnDefinition = "text")
     public String getBody() {
         return body;
     }

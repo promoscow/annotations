@@ -14,13 +14,13 @@ import java.util.Objects;
  * e-mail: vyacheslav.chernyshov@stoloto.ru
  */
 @Component
+@Mapper(entity = Continent.class, dto = ContinentDto.class)
 public class ContinentMapper extends AbstractMapper<Continent, ContinentDto> {
 
     private final PlanetRepository planetRepository;
 
     @Autowired
     ContinentMapper(PlanetRepository planetRepository) {
-        super(Continent.class, ContinentDto.class);
         this.planetRepository = planetRepository;
     }
 
