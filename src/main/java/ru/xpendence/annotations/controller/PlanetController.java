@@ -30,6 +30,7 @@ public class PlanetController {
     @ApiLogResponse(httpMethod = HttpMethod.POST, path = "/planet")
     @PostMapping
     public ResponseEntity<PlanetDto> save(@RequestBody PlanetDto dto) {
+        Long requestId;
         return ResponseEntity.ok(service.save(dto));
     }
 

@@ -27,10 +27,12 @@ public class MapperAnnotationProcessor implements BeanPostProcessor {
 
     private Object init(Object bean) {
         Class<?> managedBeanClass = bean.getClass();
-        Mapper mapper = managedBeanClass.getAnnotation(Mapper.class);
-        if (Objects.nonNull(mapper)) {
-            ((AbstractMapper) bean).setEntityClass(mapper.entity());
-            ((AbstractMapper) bean).setDtoClass(mapper.dto());
+        if (managedBeanClass.equals(AbstractMapper.class)) {
+            Mapper mapper = managedBeanClass.getAnnotation(Mapper.class);
+            if (Objects.nonNull(mapper)) {
+                ((AbstractMapper) bean).setEntityClass(mapper.entity());
+                ((AbstractMapper) bean).setDtoClass(mapper.dto());
+            }
         }
         return bean;
     }
