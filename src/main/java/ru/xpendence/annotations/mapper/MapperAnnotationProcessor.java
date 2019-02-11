@@ -1,10 +1,17 @@
 package ru.xpendence.annotations.mapper;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Author: Vyacheslav Chernyshov
@@ -27,12 +34,28 @@ public class MapperAnnotationProcessor implements BeanPostProcessor {
 
     private Object init(Object bean) {
         Class<?> managedBeanClass = bean.getClass();
-        if (managedBeanClass.equals(AbstractMapper.class)) {
-            Mapper mapper = managedBeanClass.getAnnotation(Mapper.class);
-            if (Objects.nonNull(mapper)) {
-                ((AbstractMapper) bean).setEntityClass(mapper.entity());
-                ((AbstractMapper) bean).setDtoClass(mapper.dto());
-            }
+        Mapper mapper = managedBeanClass.getAnnotation(Mapper.class);
+        if (Objects.nonNull(mapper)) {
+            ReflectionUtils.doWithFields(managedBeanClass, field -> {
+                assert field != null;
+                String fieldName = field.getName();
+                if (!fieldName.equals("entityClass") && !fieldName.equals("dtoClass")) {
+                    return;
+                }
+                ReflectionUtils.makeAccessible(field);
+                Class<?> targetClass = fieldName.equals("entityClass") ? mapper.entity() : mapper.dto();
+                Class<?> expectedClass = Stream.of(ResolvableType.forField(field).getGenerics()).findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Can't get generic type for " + fieldName)
+                        ).resolve();
+                if (Objects.nonNull(expectedClass) && !expectedClass.isAssignableFrom(targetClass)) {
+                    throw new IllegalArgumentException(
+                            String.format("Can`t assign targetClass: %s, to expectedClass: %s",
+                            targetClass, expectedClass)
+                    );
+                }
+                field.set(bean, targetClass);
+            });
         }
         return bean;
     }
