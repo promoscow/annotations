@@ -24,14 +24,11 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-//    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.2'
-//    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.2'
-    
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
@@ -42,7 +39,4 @@ dependencies {
 
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.7'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.9.7'
-
-//    compile group: 'org.springframework', name: 'spring-aop', version: '5.1.4.RELEASE'
-
 }

@@ -6,11 +6,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.util.AbstractMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -45,14 +41,11 @@ public class MapperAnnotationProcessor implements BeanPostProcessor {
                 ReflectionUtils.makeAccessible(field);
                 Class<?> targetClass = fieldName.equals("entityClass") ? mapper.entity() : mapper.dto();
                 Class<?> expectedClass = Stream.of(ResolvableType.forField(field).getGenerics()).findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException(
-                                "Can't get generic type for " + fieldName)
-                        ).resolve();
-                if (Objects.nonNull(expectedClass) && !expectedClass.isAssignableFrom(targetClass)) {
-                    throw new IllegalArgumentException(
-                            String.format("Can`t assign targetClass: %s, to expectedClass: %s",
-                            targetClass, expectedClass)
-                    );
+                        .orElseThrow(() -> new IllegalArgumentException("Unable to get generic type for " + fieldName)).resolve();
+                if (expectedClass != null && !expectedClass.isAssignableFrom(targetClass)) {
+                    throw new IllegalArgumentException(String.format(
+                            "Unable to assign Class %s to expected Class: %s",
+                            targetClass, expectedClass));
                 }
                 field.set(bean, targetClass);
             });
